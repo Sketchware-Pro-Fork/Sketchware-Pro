@@ -16,6 +16,7 @@ public class SketchHubAPI {
     private static final String TAG = "SketchHubAPI";
     private static final String BASE_URL = "https://sketchub.in/api/v3/";
     private static final String GET_PROJECTS_ENDPOINT = "get_project_list";
+    private static final String DOWNLOAD_PROJECT_ENDPOINT = "download_project_guest";
 
     private final String apiKey;
     private final Network network = new Network();
@@ -48,6 +49,24 @@ public class SketchHubAPI {
                 try {
                     ProjectModel projectModel = gson.fromJson(response, ProjectModel.class);
                     consumer.accept(projectModel);
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "Failed to parse response", e);
+                    consumer.accept(null);
+                }
+            } else {
+                consumer.accept(null);
+            }
+        });
+    }
+    
+    public void getProjectDownloadUrl(String projectId, Consumer<ProjectDownloadUrlModel> consumer) {
+        Map<String, String> formData = new HashMap<>();
+        formData.put("project_id", projectId);
+        network.postForm(BASE_URL + DOWNLOAD_PROJECT_ENDPOINT, null, formData, response -> {
+            if (response != null && !response.isEmpty()) {
+                try {
+                    ProjectDownloadUrlModel projectDownloadUrlModel = gson.fromJson(response, ProjectDownloadUrlModel.class);
+                    consumer.accept(projectDownloadUrlModel);
                 } catch (JsonSyntaxException e) {
                     Log.e(TAG, "Failed to parse response", e);
                     consumer.accept(null);
