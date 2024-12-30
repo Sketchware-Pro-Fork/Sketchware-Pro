@@ -2179,6 +2179,7 @@ Please try again later"</string>
     <string name="settings_events_manager_listeners">Listeners</string>
     <string name="settings_events_manager_details">Events manager Details</string>
     <string name="settings_block_selector">Block Selector Manager</string>
+    <string name="settings_material_theme_editor">Material Theme Editor</string>
 
     <!--  files manager screen  -->
     <string name="assets_manager_title">Assets Manager</string>
