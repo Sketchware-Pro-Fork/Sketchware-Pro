@@ -37,7 +37,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.hilal.saif.asd.AsdDialog;
-import mod.hilal.saif.asd.old.AsdOldDialog;
 
 import pro.sketchware.R;
 import pro.sketchware.lib.base.BaseTextWatcher;
@@ -123,11 +122,11 @@ public class ExtraMenuBean {
 
     private void codeMenu(Ss menu) {
         AsdDialog asdDialog = new AsdDialog(logicEditor);
-        asdDialog.setCon(menu.getArgValue().toString());
+        asdDialog.setContent(menu.getArgValue().toString());
         asdDialog.show();
         /* p2 as true is for number */
-        asdDialog.saveLis(logicEditor, false, menu, asdDialog);
-        asdDialog.cancelLis(asdDialog);
+        asdDialog.saveListener(logicEditor, false, menu, asdDialog);
+        asdDialog.cancelListener(asdDialog);
     }
 
     public void defineMenuSelector(Ss ss) {
@@ -740,10 +739,10 @@ public class ExtraMenuBean {
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
             AsdDialog editor = new AsdDialog(logicEditor);
-            editor.setCon(menu.getArgValue().toString());
+            editor.setContent(menu.getArgValue().toString());
             editor.show();
-            editor.saveLis(logicEditor, false, menu, editor);;
-            editor.cancelLis(editor);
+            editor.saveListener(logicEditor, false, menu, editor);;
+            editor.cancelListener(editor);
             dialog.dismiss();
         });
         dialog.show();
@@ -789,10 +788,10 @@ public class ExtraMenuBean {
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
             AsdDialog asdDialog = new AsdDialog(logicEditor);
-            asdDialog.setCon(edittext.getText().toString());
+            asdDialog.setContent(edittext.getText().toString());
             asdDialog.show();
-            asdDialog.saveLis(logicEditor, false, ss, asdDialog);
-            asdDialog.cancelLis(asdDialog);
+            asdDialog.saveListener(logicEditor, false, ss, asdDialog);
+            asdDialog.cancelListener(asdDialog);
             dialog.dismiss();
         });
         dialog.show();

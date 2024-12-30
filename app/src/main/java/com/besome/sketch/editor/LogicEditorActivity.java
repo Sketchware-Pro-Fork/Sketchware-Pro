@@ -1847,10 +1847,10 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         dialog.a(customView);
         dialog.configureDefaultButton("Code Editor", v -> {
             AsdDialog editor = new AsdDialog(this);
-            editor.setCon(ss.getArgValue().toString());
+            editor.setContent(ss.getArgValue().toString());
             editor.show();
-            editor.saveLis(this, false, ss, editor);;
-            editor.cancelLis(editor);
+            editor.saveListener(this, false, ss, editor);
+            editor.cancelListener(editor);
             dialog.dismiss();
         });
         dialog.b(getTranslatedString(R.string.common_word_select), v -> {
