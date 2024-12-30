@@ -42,23 +42,20 @@ public class ProjectSettingsDialog {
         binding.etTargetSdkVersion.setText(settings.getValue(ProjectSettings.SETTING_TARGET_SDK_VERSION, String.valueOf(VAR_DEFAULT_TARGET_SDK_VERSION)));
         binding.etApplicationClassName.setText(settings.getValue(ProjectSettings.SETTING_APPLICATION_CLASS, ".SketchApplication"));
 
-        binding.cbEnableViewbinding.setChecked(
-                settings.getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, "false").equals("true"));
-        binding.cbRemoveOldMethods.setChecked(
-                settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, "false").equals("true"));
-        binding.cbUseNewMaterialComponentsAppTheme.setChecked(
-                settings.getValue(ProjectSettings.SETTING_ENABLE_BRIDGELESS_THEMES, "false").equals("true"));
+        binding.cbEnableViewbinding.setChecked(settings.getValue(ProjectSettings.SETTING_VIEWBINDING, "false").equals("true"));
+        binding.cbRemoveOldMethods.setChecked(settings.getValue(ProjectSettings.SETTING_OLD_METHODS, "false").equals("true"));
+        binding.cbUseNewMaterialComponentsAppTheme.setChecked(settings.getValue(ProjectSettings.SETTING_BRIDGELESS_THEMES, "false").equals("true"));
 
         binding.enableViewbinding.setOnClickListener(v -> binding.cbEnableViewbinding.performClick());
         binding.removeOldMethods.setOnClickListener(v -> binding.cbRemoveOldMethods.performClick());
         binding.useNewMaterialComponentsAppTheme.setOnClickListener(v -> binding.cbUseNewMaterialComponentsAppTheme.performClick());
-
+        
         binding.etMinimumSdkVersion.setTag(ProjectSettings.SETTING_MINIMUM_SDK_VERSION);
         binding.etTargetSdkVersion.setTag(ProjectSettings.SETTING_TARGET_SDK_VERSION);
         binding.etApplicationClassName.setTag(ProjectSettings.SETTING_APPLICATION_CLASS);
-        binding.cbEnableViewbinding.setTag(ProjectSettings.SETTING_ENABLE_VIEWBINDING);
-        binding.cbRemoveOldMethods.setTag(ProjectSettings.SETTING_DISABLE_OLD_METHODS);
-        binding.cbUseNewMaterialComponentsAppTheme.setTag(ProjectSettings.SETTING_ENABLE_BRIDGELESS_THEMES);
+        binding.cbEnableViewbinding.setTag(ProjectSettings.SETTING_VIEWBINDING);
+        binding.cbRemoveOldMethods.setTag(ProjectSettings.SETTING_OLD_METHODS);
+        binding.cbUseNewMaterialComponentsAppTheme.setTag(ProjectSettings.SETTING_BRIDGELESS_THEMES);
 
         dialog.setContentView(binding.getRoot());
 

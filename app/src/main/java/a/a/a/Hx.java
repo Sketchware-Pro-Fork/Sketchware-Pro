@@ -35,7 +35,7 @@ public class Hx {
         this.projectFileBean = projectFileBean;
 
         ProjectSettings projectSettings = new ProjectSettings(jq.sc_id);
-        isViewBindingEnabled = projectSettings.getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, "false").equals("true");
+        isViewBindingEnabled = projectSettings.getValue(ProjectSettings.SETTING_VIEWBINDING, "false").equals("true");
 
         ArrayList<ViewBean> views = new ArrayList<>(eC.d(projectFileBean.getXmlName()));
         if (projectFileBean.hasActivityOption(ProjectFileBean.OPTION_ACTIVITY_FAB)) {

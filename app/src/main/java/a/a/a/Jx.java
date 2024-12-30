@@ -94,7 +94,7 @@ public class Jx {
         permissionManager = new PermissionManager(eCVar.a, projectFileBean.getJavaName());
         ox = new Ox(buildConfig, projectFileBean);
         extraBlocks = getExtraBlockData();
-        isViewBindingEnabled = settings.getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
+        isViewBindingEnabled = settings.getValue(ProjectSettings.SETTING_VIEWBINDING, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
                 .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE);
     }
 
@@ -569,7 +569,7 @@ public class Jx {
                 sb.append(EOL);
             }
         }
-        if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
+        if (!isFragment && !settings.getValue(ProjectSettings.SETTING_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
                 .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
             sb.append(getDeprecatedMethodsCode());
         }

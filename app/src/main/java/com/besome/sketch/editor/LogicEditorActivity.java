@@ -2205,7 +2205,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
             D = savedInstanceState.getString("event");
             parcelable = savedInstanceState.getParcelable("project_file");
         }
-        isViewBindingEnabled = new ProjectSettings(B).getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, "false").equals("true");
+        isViewBindingEnabled = new ProjectSettings(B).getValue(ProjectSettings.SETTING_VIEWBINDING, "false").equals("true");
         M = (ProjectFileBean) parcelable;
         T = (int) wB.a(getBaseContext(), (float) T);
         Toolbar toolbar = findViewById(R.id.toolbar);

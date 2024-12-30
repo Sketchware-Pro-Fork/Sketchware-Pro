@@ -11,16 +11,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.StringRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.android.annotations.NonNull;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import dev.chrisbanes.insetter.Insetter;
 
 import java.util.ArrayList;
+
+import mod.hey.studios.util.Helper;
 
 import pro.sketchware.dialogs.ProgressDialog;
 
@@ -161,9 +164,16 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         return false;
     }
 
-    public void handleInsetts(View root) {
+    protected void handleInsetts(View root) {
         Insetter.builder()
             .padding(WindowInsetsCompat.Type.navigationBars())
             .applyToView(root);
+    }
+    
+    protected void configureToolbar(@NonNull final MaterialToolbar toolbar) {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
     }
 }

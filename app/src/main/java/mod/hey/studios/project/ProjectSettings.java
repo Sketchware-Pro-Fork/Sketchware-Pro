@@ -1,9 +1,6 @@
 package mod.hey.studios.project;
 
-import android.app.Application;
-import android.content.pm.ApplicationInfo;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.EditText;
@@ -11,106 +8,100 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.HashMap;
 
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.LogUtil;
+
 import pro.sketchware.utility.FileUtil;
 
 public class ProjectSettings {
 
-    /**
-     * Setting for the final app's {@code minSdkVersion}
-     *
-     * @see ApplicationInfo#minSdkVersion
-     */
-    public static final String SETTING_MINIMUM_SDK_VERSION = "min_sdk";
-
-    /**
-     * Setting to make the app's main theme inherit from fully material-styled themes, and not *.Bridge ones
-     */
-    public static final String SETTING_ENABLE_BRIDGELESS_THEMES = "enable_bridgeless_themes";
-
-    /**
-     * Setting to enable view binding in the project
-     */
-    public static final String SETTING_ENABLE_VIEWBINDING = "enable_viewbinding";
-
-    /**
-     * Setting for the final app's {@link Application} class
-     *
-     * @see Application
-     */
-    public static final String SETTING_APPLICATION_CLASS = "app_class";
-
-    /**
-     * Setting for the final app's {@code targetSdkVersion}
-     *
-     * @see ApplicationInfo#targetSdkVersion
-     */
-    public static final String SETTING_TARGET_SDK_VERSION = "target_sdk";
-
-    /**
-     * Setting to disable showing deprecated methods included in every generated class, e.g. showMessage(String)
-     */
-    public static final String SETTING_DISABLE_OLD_METHODS = "disable_old_methods";
-    /**
-     * Setting to use new xml command
-     */
-    public static final String SETTING_NEW_XML_COMMAND = "xml_command";
+    private static final String TAG = "ProjectSettings";
+    
     public static final String SETTING_GENERIC_VALUE_TRUE = "true";
     public static final String SETTING_GENERIC_VALUE_FALSE = "false";
-    private static final String TAG = "ProjectSettings";
-    private final String path;
-    public String sc_id;
-    private HashMap<String, String> hashmap;
 
-    public ProjectSettings(String scId) {
-        sc_id = scId;
+    /** Setting for the final app's {@code minSdkVersion} */
+    public static final String SETTING_MINIMUM_SDK_VERSION = "min_sdk";
+    
+    /** Setting for the final app's {@code targetSdkVersion} */
+    public static final String SETTING_TARGET_SDK_VERSION = "target_sdk";
+    
+    /** Setting for the final app's {@link Application} class */
+    public static final String SETTING_APPLICATION_CLASS = "app_class";
+    
+    /** Setting to enable view binding in the project */
+    public static final String SETTING_VIEWBINDING = "enable_viewbinding";
+    
+    /** Setting to disable showing deprecated methods included in every generated class, e.g. showMessage(String) */
+    public static final String SETTING_OLD_METHODS = "disable_old_methods";
+    
+    /** Setting to make the app's main theme inherit from fully material-styled themes, and not *.Bridge ones */
+    public static final String SETTING_BRIDGELESS_THEMES = "enable_bridgeless_themes";
+    
+    /** Setting to make the app's main theme material design 3. */
+    public static final String SETTING_MATERIAL3_THEME = "material3_theme";
+    
+    /** Setting to use new xml command */
+    public static final String SETTING_NEW_XML_COMMAND = "xml_command";
+    
+    protected final String scId;
+    
+    private final String settingsPath;
+    private HashMap<String, String> settingsMap;
 
-        path = getPath();
+    public ProjectSettings(final String scId) {
+        this.scId = scId;
+        settingsPath = new File(Environment.getExternalStorageDirectory(), ".sketchware/data/" + scId + "/project_config").getAbsolutePath();
 
-        if (FileUtil.isExistFile(path)) {
+        if (FileUtil.isExistFile(settingsPath)) {
             try {
-                hashmap = new Gson().fromJson(FileUtil.readFile(path).trim(), Helper.TYPE_STRING_MAP);
+                settingsMap = new Gson().fromJson(FileUtil.readFile(settingsPath).trim(), Helper.TYPE_STRING_MAP);
             } catch (Exception e) {
-                Log.e("ProjectSettings", "Failed to read project settings for project " + sc_id + "!", e);
-                hashmap = new HashMap<>();
+                LogUtil.e("ProjectSettings", "Failed to read project settings for project " + scId + "!", e);
+                settingsMap = new HashMap<>();
                 save();
             }
         } else {
-            hashmap = new HashMap<>();
+            settingsMap = new HashMap<>();
         }
     }
 
     /**
      * @return The configured minimum SDK version. Returns 21 if none or an invalid value was set.
+     *
      * @see #SETTING_MINIMUM_SDK_VERSION
      */
     public int getMinSdkVersion() {
-        if (hashmap.containsKey(SETTING_MINIMUM_SDK_VERSION)) {
-            try {
-                //noinspection ConstantConditions because we catch that already
-                return Integer.parseInt(hashmap.get(SETTING_MINIMUM_SDK_VERSION));
-            } catch (NumberFormatException | NullPointerException e) {
-                LogUtil.e(TAG, "Failed to parse the project's minimum SDK version! Defaulting to 21", e);
-                return 21;
-            }
-        } else {
-            return 21;
-        }
+        return Integer.parseInt(getValue(SETTING_MINIMUM_SDK_VERSION, "21"));
     }
-
-    public String getPath() {
-        return new File(Environment.getExternalStorageDirectory(), ".sketchware/data/" + sc_id + "/project_config").getAbsolutePath();
+    
+    /**
+     * @return Return true if Material Components Bridgeless is enable. false if no.
+     *
+     * @see #SETTING_BRIDGELESS_THEMES
+     */
+    public boolean isBridgelessThemeEnable() {
+        return Boolean.parseBoolean(getValue(SETTING_BRIDGELESS_THEMES, "false"));
     }
-
+    
+    /**
+     * @return Return true if Material Design 3 is enable. false if no.
+     *
+     * @see #SETTING_MATERIAL3_THEME
+     */
+    public boolean isMaterial3ThemeEnable() {
+        return Boolean.parseBoolean(getValue(SETTING_MATERIAL3_THEME, "false"));
+    }
+    
     public String getValue(String key, String defaultValue) {
-        if (hashmap.containsKey(key)) {
-            if (!hashmap.get(key).isEmpty()) {
-                return hashmap.get(key);
+        if (settingsMap.containsKey(key)) {
+            if (!settingsMap.get(key).isEmpty()) {
+                return settingsMap.get(key);
             } else {
                 return defaultValue;
             }
@@ -120,30 +111,28 @@ public class ProjectSettings {
     }
 
     public void setValues(View... views) {
-        for (View v : views) {
-            if (v.getTag() != null) {
-                String key = (String) v.getTag();  // v.getTag(0);
-                //String value = (String) v.getTag(1);
+        for (View view : views) {
+            if (view.getTag() != null) {
+                String key = (String) view.getTag();
                 String value;
 
-                if (v instanceof EditText editText) {
+                if (view instanceof EditText editText) {
                     value = editText.getText().toString();
-                } else if (v instanceof Checkable checkable) {
+                } else if (view instanceof Checkable checkable) {
                     value = checkable.isChecked() ? "true" : "false";
-                } else if (v instanceof RadioGroup radioGroup) {
+                } else if (view instanceof RadioGroup radioGroup) {
                     value = getCheckedRbValue(radioGroup);
                 } else {
                     continue;
                 }
-
-                hashmap.put(key, value);
+                settingsMap.put(key, value);
             }
         }
         save();
     }
 
     public void setValue(String key, String value) {
-        hashmap.put(key, value);
+        settingsMap.put(key, value);
         save();
     }
 
@@ -158,8 +147,15 @@ public class ProjectSettings {
 
         return "";
     }
+    
+    public String getPath() {
+        return settingsPath;
+    }
 
     private void save() {
-        FileUtil.writeFile(path, new Gson().toJson(hashmap));
+        var gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
+        FileUtil.writeFile(settingsPath, gson.toJson(settingsMap));
     }
 }

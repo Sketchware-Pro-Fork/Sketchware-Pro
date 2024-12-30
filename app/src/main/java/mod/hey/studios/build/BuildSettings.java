@@ -23,12 +23,12 @@ public class BuildSettings extends ProjectSettings implements Serializable {
     public static final String SETTING_JAVA_VERSION_10 = "10";
     public static final String SETTING_JAVA_VERSION_11 = "11";
 
-    public BuildSettings(String sc_id) {
-        super(sc_id);
+    public BuildSettings(String scId) {
+        super(scId);
     }
 
     @Override
     public String getPath() {
-        return FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/build_config";
+        return FileUtil.getExternalStorageDir() + "/.sketchware/data/" + scId + "/build_config";
     }
 }

@@ -160,7 +160,7 @@ public class ProjectBuilder {
     }
 
     public void generateViewBinding() throws IOException, SAXException {
-        if (settings.getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, ProjectSettings.SETTING_GENERIC_VALUE_FALSE)
+        if (settings.getValue(ProjectSettings.SETTING_VIEWBINDING, ProjectSettings.SETTING_GENERIC_VALUE_FALSE)
                 .equals(ProjectSettings.SETTING_GENERIC_VALUE_FALSE)) {
             return;
         }

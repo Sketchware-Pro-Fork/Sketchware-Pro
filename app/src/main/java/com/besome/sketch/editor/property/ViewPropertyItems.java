@@ -829,7 +829,7 @@ public class ViewPropertyItems extends LinearLayout implements Kw, View.OnClickL
         }
 
         if (!bean.id.equals(bean.preId)) {
-            boolean viewBinding = settings.getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING,  "false").equals("true");
+            boolean viewBinding = settings.getValue(ProjectSettings.SETTING_VIEWBINDING,  "false").equals("true");
             for (ViewBean viewBean : jC.a(sc_id).d(e.getXmlName())) {
                 if (viewBean.parent.equals(bean.preId)) {
                     viewBean.parent = bean.id;
