@@ -32,6 +32,7 @@ import mod.hilal.saif.blocks.CommandBlock;
 import mod.pranav.viewbinding.ViewBindingBuilder;
 
 import pro.sketchware.SketchApplication;
+import pro.sketchware.managers.exclude.BuiltInClassesExcludeManager;
 import pro.sketchware.utility.FileUtil;
 import pro.sketchware.xml.XmlBuilder;
 
@@ -377,27 +378,29 @@ public class yq {
         boolean logcatEnabled = N.isDebugBuild && new BuildSettings(sc_id).getValue(
                 BuildSettings.SETTING_ENABLE_LOGCAT, BuildSettings.SETTING_GENERIC_VALUE_TRUE).equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE);
 
+        var builtInClassesExcludeManager = new BuiltInClassesExcludeManager(sc_id);
+
         String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";
-        if (!new File(javaDir, "DebugActivity.java").exists()) {
+        if (!new File(javaDir, BuiltInClassesExcludeManager.DEBUG_ACTIVITY).exists() && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.DEBUG_ACTIVITY)) {
             fileUtil.b(javaFilesPath + File.separator
                             + packageNameAsFolders + File.separator
-                            + "DebugActivity.java",
+                            + BuiltInClassesExcludeManager.DEBUG_ACTIVITY,
                     PACKAGE_PLACEHOLDER_PATTERN.matcher(fileUtil.b(
                             context,
                             "debug" + File.separator
-                                    + "DebugActivity.java"
+                                    + BuiltInClassesExcludeManager.DEBUG_ACTIVITY
                     )).replaceAll(packageName));
         }
 
         String customApplicationClassName = new ProjectSettings(sc_id).getValue(ProjectSettings.SETTING_APPLICATION_CLASS,
-                ".SketchApplication");
-        boolean notUsingCustomApplicationClass = customApplicationClassName.equals(".SketchApplication");
-        if (!new File(javaDir, "SketchApplication.java").exists() && notUsingCustomApplicationClass) {
+                "." + BuiltInClassesExcludeManager.SKETCH_APPLICATION); 
+        boolean notUsingCustomApplicationClass = customApplicationClassName.equals("." + BuiltInClassesExcludeManager.SKETCH_APPLICATION);
+        if (!new File(javaDir, BuiltInClassesExcludeManager.SKETCH_APPLICATION).exists() && notUsingCustomApplicationClass && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.SKETCH_APPLICATION)) {
             boolean applyMultiDex = projectSettings.getMinSdkVersion() < 21;
 
             String sketchApplicationFileContent = PACKAGE_PLACEHOLDER_PATTERN.matcher(fileUtil.b(
                     context,
-                    "debug" + File.separator + "SketchApplication.java"
+                    "debug" + File.separator + BuiltInClassesExcludeManager.SKETCH_APPLICATION
             )).replaceAll(packageName);
             if (applyMultiDex) {
                 sketchApplicationFileContent = sketchApplicationFileContent.replaceAll(
@@ -415,16 +418,16 @@ public class yq {
 
             fileUtil.b(javaFilesPath + File.separator
                             + packageNameAsFolders + File.separator
-                            + "SketchApplication.java",
+                            + BuiltInClassesExcludeManager.SKETCH_APPLICATION,
                     sketchApplicationFileContent);
         }
 
         if (logcatEnabled) {
-            if (!new File(javaDir, "SketchLogger.java").exists()) {
+            if (!new File(javaDir, BuiltInClassesExcludeManager.SKETCH_LOGGER).exists() && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.SKETCH_LOGGER)) {
                 String sketchLoggerFileContent = PACKAGE_PLACEHOLDER_PATTERN.matcher(fileUtil.b(
                         context,
                         "debug" + File.separator
-                                + "SketchLogger.java"
+                                + BuiltInClassesExcludeManager.SKETCH_LOGGER
                 )).replaceAll(packageName);
 
                 if (!notUsingCustomApplicationClass && customApplicationClassName.charAt(0) == '.') {
@@ -434,7 +437,7 @@ public class yq {
 
                 fileUtil.b(javaFilesPath + File.separator
                         + packageNameAsFolders + File.separator
-                        + "SketchLogger.java", sketchLoggerFileContent);
+                        + BuiltInClassesExcludeManager.SKETCH_LOGGER, sketchLoggerFileContent);
             }
         }
     }
@@ -771,7 +774,7 @@ public class yq {
             FileUtil.copyFile(path, FileUtil.getExternalStorageDir().concat("/.sketchware/temp/commands"));
         }
         
-        var viewBindingBuilder = new ViewBindingBuilder(List.of(), new File("."), packageName);
+        var viewBindingBuilder = new ViewBindingBuilder(null, null, packageName);
 
         // Generate layouts unless a custom version of it exists already
         // at /Internal storage/.sketchware/data/<sc_id>/files/resource/layout/
@@ -816,40 +819,42 @@ public class yq {
 
         Ix ix = new Ix(N, projectFileManager.b(), builtInLibraryManager);
         ix.setYq(this);
+        
+        var builtInClassesExcludeManager = new BuiltInClassesExcludeManager(sc_id);
 
         // Make generated classes viewable
-        if (!javaFiles.contains(new File(javaDir + "SketchwareUtil.java"))) {
+        if (!javaFiles.contains(new File(javaDir + "SketchwareUtil.java")) && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.SKETCHWARE_UTIL)) {
             srcCodeBeans.add(new SrcCodeBean("SketchwareUtil.java",
                     Lx.i(packageName)));
         }
 
-        if (!javaFiles.contains(new File(javaDir + "FileUtil.java"))) {
+        if (!javaFiles.contains(new File(javaDir + "FileUtil.java")) && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.FILE_UTIL)) {
             srcCodeBeans.add(new SrcCodeBean("FileUtil.java",
                     Lx.e(packageName)));
         }
 
-        if (!javaFiles.contains(new File(javaDir + "RequestNetwork.java")) && N.isHttp3Used) {
+        if (!javaFiles.contains(new File(javaDir + "RequestNetwork.java")) && N.isHttp3Used && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.REQUEST_NETWORK)) {
             srcCodeBeans.add(new SrcCodeBean("RequestNetwork.java",
                     Lx.j(Lx.h(packageName), false)));
         }
 
-        if (!FileUtil.isExistFile(javaDir + "RequestNetworkController.java") && N.isHttp3Used) {
+        if (!FileUtil.isExistFile(javaDir + "RequestNetworkController.java") && N.isHttp3Used && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.REQUEST_NETWORK_CONTROLLER)) {
             srcCodeBeans.add(new SrcCodeBean("RequestNetworkController.java",
                     Lx.j(Lx.g(packageName), false)));
         }
 
-        if (!javaFiles.contains(new File(javaDir + "BluetoothConnect.java")) && N.hasPermission(jq.PERMISSION_BLUETOOTH)) {
+        if (!javaFiles.contains(new File(javaDir + "BluetoothConnect.java")) && N.hasPermission(jq.PERMISSION_BLUETOOTH) && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.BLUETOOTH_CONNECT)) {
             srcCodeBeans.add(new SrcCodeBean("BluetoothConnect.java",
                     Lx.j(Lx.b(packageName), false)));
         }
 
-        if (!javaFiles.contains(new File(javaDir + "BluetoothController.java")) && N.hasPermission(jq.PERMISSION_BLUETOOTH)) {
+        if (!javaFiles.contains(new File(javaDir + "BluetoothController.java")) && N.hasPermission(jq.PERMISSION_BLUETOOTH) && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.BLUETOOTH_CONTROLLER)) {
             srcCodeBeans.add(new SrcCodeBean("BluetoothController.java",
                     Lx.j(Lx.c(packageName), false)));
         }
 
         if (N.isMapUsed) {
-            if (!javaFiles.contains(new File(javaDir + "GoogleMapController.java")) && N.isMapUsed) {
+            if (!javaFiles.contains(new File(javaDir + "GoogleMapController.java")) && N.isMapUsed && !builtInClassesExcludeManager.isPresent(BuiltInClassesExcludeManager.GOOGLE_MAP_CONTROLLER)) {
                 srcCodeBeans.add(new SrcCodeBean("GoogleMapController.java",
                         Lx.j(Lx.f(packageName), false)));
             }

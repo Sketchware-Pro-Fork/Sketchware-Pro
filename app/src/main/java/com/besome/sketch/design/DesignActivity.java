@@ -135,6 +135,7 @@ import pro.sketchware.utility.SketchwareUtil;
 import pro.sketchware.utility.ThemeUtils;
 import pro.sketchware.utility.apk.ApkSignatures;
 import pro.sketchware.activities.editor.view.CodeViewerActivity;
+import pro.sketchware.managers.exclude.ui.BuiltInClassesExcludeManagerDialog;
 
 public class DesignActivity extends BaseAppCompatActivity implements View.OnClickListener {
     public static String sc_id;
@@ -149,6 +150,7 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
     private DB t;
     private Menu bottomMenu;
     private MenuItem directXmlEditorMenu;
+    private MenuItem builtInClassesExcludeManagerMenu;
     private Handler handler = new Handler(Looper.getMainLooper());
     private ProjectFileBean projectFile;
     private TextView fileName;
@@ -468,6 +470,7 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
         bottomMenu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK").setVisible(false);
         bottomMenu.add(Menu.NONE, 6, Menu.NONE, "Show Apk signatures").setVisible(false);
         directXmlEditorMenu = bottomMenu.add(Menu.NONE, 7, Menu.NONE, "Direct XML editor");
+        builtInClassesExcludeManagerMenu = bottomMenu.add(Menu.NONE, 8, Menu.NONE, getString(R.string.builtin_classes_exclude_manager_title));
 
         bottomAppBar.setOnMenuItemClickListener(
                 item -> {
@@ -499,6 +502,7 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
                             apkSignatures.showSignaturesDialog();
                         }
                         case 7 -> toViewCodeEditor();
+                        case 8 -> toBuiltInClassesExcludeManagerDialog();
                         default -> {
                             if (itemId == R.id.menu_run) {
                                 BuildTask buildTask = new BuildTask(this);
@@ -541,12 +545,14 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
                 }
                 if (position == 0) {
                     directXmlEditorMenu.setVisible(true);
+                    builtInClassesExcludeManagerMenu.setVisible(false);
                     if (viewTabAdapter != null) {
                         viewTabAdapter.c(true);
                         xmlLayoutOrientation.setImageResource(R.drawable.ic_mtrl_screen);
                     }
                 } else if (position == 1) {
                     directXmlEditorMenu.setVisible(false);
+                    builtInClassesExcludeManagerMenu.setVisible(true);
                     if (viewTabAdapter != null) {
                         xmlLayoutOrientation.setImageResource(R.drawable.ic_mtrl_code);
                         viewTabAdapter.c(false);
@@ -556,6 +562,7 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
                     }
                 } else {
                     directXmlEditorMenu.setVisible(false);
+                    builtInClassesExcludeManagerMenu.setVisible(true);
                     if (viewTabAdapter != null) {
                         xmlLayoutOrientation.setImageResource(R.drawable.ic_mtrl_code);
                         viewTabAdapter.c(false);
@@ -1021,6 +1028,14 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
      */
     void toXMLCommandManager() {
         launchActivity(ManageXMLCommandActivity.class, null);
+    }
+
+    /**
+     * Opens {@link BuiltInClassesExcludeManagerDialog}.
+     */
+    void toBuiltInClassesExcludeManagerDialog() {
+        var dialog = new BuiltInClassesExcludeManagerDialog(sc_id);
+        dialog.show(getSupportFragmentManager(), dialog.getTag());
     }
 
     @SafeVarargs
