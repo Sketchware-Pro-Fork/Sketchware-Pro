@@ -505,7 +505,9 @@ public class MyProjectSettingActivity extends BaseAppCompatActivity implements V
                 lC.a(sc_id, data);
                 wq.a(getApplicationContext(), sc_id);
                 new oB().b(wq.b(sc_id));
-                new ProjectSettings(sc_id).setValue(ProjectSettings.SETTING_NEW_XML_COMMAND, ProjectSettings.SETTING_GENERIC_VALUE_TRUE);
+                final var ps = new ProjectSettings(sc_id);
+                ps.setValue(ProjectSettings.SETTING_NEW_XML_COMMAND, ProjectSettings.SETTING_GENERIC_VALUE_TRUE);
+                ps.setValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, ProjectSettings.SETTING_GENERIC_VALUE_TRUE);
             }
             try {
                 FileUtil.deleteFile(getTempIconsFolderPath("mipmaps" + File.separator));
