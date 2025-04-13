@@ -348,7 +348,7 @@ public class SrcCodeEditor extends BaseAppCompatActivity {
                             String ss = b.toString();
 
                             try {
-                                ss = Lx.j(ss, true);
+                                ss = Lx.formatJavaCode(ss);
                             } catch (Exception e) {
                                 err = true;
                                 SketchwareUtil.toastError("Your code contains incorrectly nested parentheses");

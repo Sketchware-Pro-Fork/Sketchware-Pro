@@ -808,28 +808,28 @@ public class yq {
 
         if (!javaFiles.contains(new File(javaDir + "RequestNetwork.java")) && N.isHttp3Used) {
             srcCodeBeans.add(new SrcCodeBean("RequestNetwork.java",
-                    Lx.j(Lx.h(packageName), false)));
+                    Lx.formatJavaCode(Lx.h(packageName))));
         }
 
         if (!FileUtil.isExistFile(javaDir + "RequestNetworkController.java") && N.isHttp3Used) {
             srcCodeBeans.add(new SrcCodeBean("RequestNetworkController.java",
-                    Lx.j(Lx.g(packageName), false)));
+                    Lx.formatJavaCode(Lx.g(packageName))));
         }
 
         if (!javaFiles.contains(new File(javaDir + "BluetoothConnect.java")) && N.hasPermission(jq.PERMISSION_BLUETOOTH)) {
             srcCodeBeans.add(new SrcCodeBean("BluetoothConnect.java",
-                    Lx.j(Lx.b(packageName), false)));
+                    Lx.formatJavaCode(Lx.b(packageName))));
         }
 
         if (!javaFiles.contains(new File(javaDir + "BluetoothController.java")) && N.hasPermission(jq.PERMISSION_BLUETOOTH)) {
             srcCodeBeans.add(new SrcCodeBean("BluetoothController.java",
-                    Lx.j(Lx.c(packageName), false)));
+                    Lx.formatJavaCode(Lx.c(packageName))));
         }
 
         if (N.isMapUsed) {
             if (!javaFiles.contains(new File(javaDir + "GoogleMapController.java")) && N.isMapUsed) {
                 srcCodeBeans.add(new SrcCodeBean("GoogleMapController.java",
-                        Lx.j(Lx.f(packageName), false)));
+                        Lx.formatJavaCode(Lx.f(packageName))));
             }
         }
 

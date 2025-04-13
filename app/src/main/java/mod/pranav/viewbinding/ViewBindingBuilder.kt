@@ -89,7 +89,7 @@ ${
 }
         """.trimIndent()
 
-        return Lx.j(content, false)
+        return Lx.formatJavaCode(content)
     }
 
     /** generate view binding and save in output file */

@@ -30,7 +30,7 @@ public class CodeViewerActivity extends BaseAppCompatActivity {
         binding.toolbar.setSubtitle(scId);
         binding.editor.setTypefaceText(EditorUtils.getTypeface(this));
         binding.editor.setTextSize(14);
-        binding.editor.setText(Lx.j(code, false));
+        binding.editor.setText(Lx.formatJavaCode(code));
         binding.editor.setEditable(false);
         binding.editor.setWordwrap(false);
         loadColorScheme(scheme);

@@ -5,6 +5,9 @@ import android.text.TextUtils;
 import com.besome.sketch.beans.ComponentBean;
 import com.besome.sketch.beans.ViewBean;
 import com.google.gson.Gson;
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import com.google.googlejavaformat.java.JavaFormatterOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -193,7 +196,7 @@ public class Lx {
             }
         }
 
-        return j(content + "}\r\n", false);
+        return formatJavaCode(content + "}\r\n");
     }
 
     private static boolean isLibraryNotExcluded(String libraryName, List<BuiltInLibraries.BuiltInLibrary> excludedLibraries) {
@@ -3043,117 +3046,21 @@ public class Lx {
     }
 
     /**
-     * @return Formatted code
+     * Format code with Google Java Format.
+     * Uses AOSP 4 Indent Style.
+     * @return formatted code.
      */
-    public static String j(String code, boolean indentMultiLineComments) {
-        StringBuilder formattedCode = new StringBuilder(4096);
-        char[] codeChars = code.toCharArray();
-        boolean processingSingleLineComment = false;
-        boolean processingMultiLineComment = false;
-        boolean processingEscape = false;
-        int openBraces = 0;
-        boolean processingChar = false;
-        boolean processingString = false;
+    public static String formatJavaCode(final String code) {
+        try {
+            final var options = JavaFormatterOptions.builder()
+                .style(JavaFormatterOptions.Style.AOSP)
+                .build();
 
-        for (int i = 0; i < codeChars.length; i++) {
-            char codeBit = codeChars[i];
-            if (processingSingleLineComment) {
-                if (codeBit == '\n') {
-                    formattedCode.append(codeBit);
-                    appendIndent(formattedCode, openBraces);
-                    processingSingleLineComment = false;
-                } else {
-                    formattedCode.append(codeBit);
-                }
-            } else {
-                if (processingMultiLineComment) {
-                    if (codeBit == '*' && codeChars.length > i + 1) {
-                        char nextChar = codeChars[i + 1];
-                        if (nextChar == '/') {
-                            formattedCode.append(codeBit);
-                            formattedCode.append(nextChar);
-                            i += 1;
-                            processingMultiLineComment = false;
-                            continue;
-                        }
-                    }
-
-                    formattedCode.append(codeBit);
-
-                    if (indentMultiLineComments && codeBit == '\n') {
-                        appendIndent(formattedCode, openBraces);
-                    }
-                } else if (processingEscape) {
-                    formattedCode.append(codeBit);
-                    processingEscape = false;
-                } else if (codeBit == '\\') {
-                    formattedCode.append(codeBit);
-                    processingEscape = true;
-                } else if (processingChar) {
-                    if (codeBit == '\'') {
-                        formattedCode.append(codeBit);
-                        processingChar = false;
-                    } else {
-                        formattedCode.append(codeBit);
-                    }
-                } else if (processingString) {
-                    if (codeBit == '"') {
-                        formattedCode.append(codeBit);
-                        processingString = false;
-                    } else {
-                        formattedCode.append(codeBit);
-                    }
-                } else {
-                    if (codeBit == '/' && codeChars.length > i + 1) {
-                        char nextChar = codeChars[i + 1];
-                        if (nextChar == '/') {
-                            formattedCode.append(codeBit);
-                            formattedCode.append(nextChar);
-                            i += 1;
-                            processingSingleLineComment = true;
-                            continue;
-                        }
-
-                        if (nextChar == '*') {
-                            formattedCode.append(codeBit);
-                            formattedCode.append(nextChar);
-                            i += 1;
-                            processingMultiLineComment = true;
-                            continue;
-                        }
-                    }
-
-                    if (codeBit != '\n') {
-                        if (codeBit == '\'') {
-                            processingChar = true;
-                        }
-
-                        if (codeBit == '"') {
-                            processingString = true;
-                        }
-
-                        if (codeBit == '{') {
-                            openBraces += 1;
-                        }
-
-                        if (codeBit == '}' && openBraces > 0) {
-                            openBraces -= 1;
-                            if (formattedCode.charAt(formattedCode.length() - 1) == '\t') {
-                                formattedCode.deleteCharAt(formattedCode.length() - 1);
-                            }
-                        }
-
-                        formattedCode.append(codeBit);
-                        continue;
-                    }
-
-                    formattedCode.append(codeBit);
-                    appendIndent(formattedCode, openBraces);
-                }
-            }
+            final var formattedCode = new Formatter(options).formatSource(code);
+            return formattedCode;
+        } catch (final FormatterException e) {
+            return code;
         }
-
-        return formattedCode.toString();
     }
 
     public static String pagerAdapter(Ox ox, String pagerName, String pagerItemLayoutName, ArrayList<ViewBean> pagerItemViews, String onBindCustomViewLogic, boolean isViewBindingEnabled) {

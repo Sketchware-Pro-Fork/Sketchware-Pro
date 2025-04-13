@@ -100,12 +100,12 @@ public class Jx {
 
     public String activityResult() {
         ArrayList<BlockBean> blocks = jC.a(projectDataManager.a).a(projectFileBean.getJavaName(), "onActivityResult_onActivityResult");
-        return Lx.j(new Fx(projectFileBean.getActivityName(), buildConfig, blocks, isViewBindingEnabled).a(), false);
+        return Lx.formatJavaCode(new Fx(projectFileBean.getActivityName(), buildConfig, blocks, isViewBindingEnabled).a());
     }
 
     public String initializeLogic() {
         ArrayList<BlockBean> blocks = jC.a(projectDataManager.a).a(projectFileBean.getJavaName(), "initializeLogic_initializeLogic");
-        return Lx.j(new Fx(projectFileBean.getActivityName(), buildConfig, blocks, isViewBindingEnabled).a(), false);
+        return Lx.formatJavaCode(new Fx(projectFileBean.getActivityName(), buildConfig, blocks, isViewBindingEnabled).a());
     }
 
     private void extraVariables() {
@@ -601,7 +601,7 @@ public class Jx {
             code = code.replaceAll("getFragmentManager", "getSupportFragmentManager");
         }
 
-        return CommandBlock.CB(Lx.j(code, false));
+        return CommandBlock.CB(Lx.formatJavaCode(code));
     }
 
     private String getListDeclarationAndAddImports(int listType, String listName) {
