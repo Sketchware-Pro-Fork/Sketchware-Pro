@@ -1,5 +1,6 @@
 package mod.pranav.viewbinding
 
+import a.a.a.Lx
 import org.w3c.dom.Node
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
@@ -88,7 +89,7 @@ ${
 }
         """.trimIndent()
 
-        return content
+        return Lx.j(content, false)
     }
 
     /** generate view binding and save in output file */
