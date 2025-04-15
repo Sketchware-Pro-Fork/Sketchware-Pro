@@ -868,14 +868,16 @@ public class Jx {
     }
 
     private String getViewInitializer(ViewBean viewBean) {
-        String replaceAll = WIDGET_NAME_PATTERN.matcher(viewBean.convert).replaceAll("");
-        if (replaceAll.isEmpty()) {
-            replaceAll = viewBean.getClassInfo().a();
+        final var viewPackageName = viewBean.convert;
+        final var viewClassName = viewPackageName.substring(viewPackageName.lastIndexOf("."));
+        if (viewClassName.isEmpty()) {
+            viewClassName = viewBean.getClassInfo().a();
         }
-        if (projectFileBean.fileName.contains("_fragment")) {
-            return Lx.getViewInitializer(replaceAll, viewBean.id, true, isViewBindingEnabled);
-        }
-        return Lx.getViewInitializer(replaceAll, viewBean.id, false, isViewBindingEnabled);
+        return Lx.getViewInitializer(
+            viewClassName,
+            viewBean.id,
+            projectFileBean.fileName.contains("_fragment"),
+            isViewBindingEnabled);
     }
 
     private void addMoreBlockCodes() {
