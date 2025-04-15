@@ -7,9 +7,11 @@ import com.besome.sketch.beans.ViewBean;
 public interface sy {
     ViewBean getBean();
 
+    void setBean(ViewBean viewBean);
+
     boolean getFixed();
 
-    void setBean(ViewBean viewBean);
+    void setFixed(boolean fixed);
 
     void setSelection(boolean selection);
 }

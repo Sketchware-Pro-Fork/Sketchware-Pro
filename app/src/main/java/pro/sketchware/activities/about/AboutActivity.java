@@ -14,28 +14,29 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
-import pro.sketchware.R;
-import pro.sketchware.databinding.ActivityAboutAppBinding;
 
-import pro.sketchware.activities.about.fragments.ChangeLogFragment;
+import mod.hey.studios.util.Helper;
+import pro.sketchware.R;
 import pro.sketchware.activities.about.fragments.BetaChangesFragment;
+import pro.sketchware.activities.about.fragments.ChangeLogFragment;
 import pro.sketchware.activities.about.fragments.TeamFragment;
 import pro.sketchware.activities.about.models.AboutAppViewModel;
 import pro.sketchware.activities.about.models.AboutResponseModel;
+import pro.sketchware.databinding.ActivityAboutAppBinding;
 import pro.sketchware.utility.Network;
-import mod.hey.studios.util.Helper;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseAppCompatActivity {
 
+    private final Network network = new Network();
+    public AboutAppViewModel aboutAppData;
     private ActivityAboutAppBinding binding;
     private SharedPreferences sharedPref;
-    public AboutAppViewModel aboutAppData;
-    private final Network network = new Network();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
 
@@ -64,9 +65,9 @@ public class AboutActivity extends AppCompatActivity {
         binding.viewPager.setAdapter(adapter);
 
         String[] tabTitles = new String[]{
-                getString(R.string.about_team_title),
-                getString(R.string.about_changelog_title),
-                getString(R.string.about_beta_changes_title)
+                Helper.getResString(R.string.about_team_title),
+                Helper.getResString(R.string.about_changelog_title),
+                Helper.getResString(R.string.about_beta_changes_title)
         };
 
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(tabTitles[position])).attach();
@@ -93,7 +94,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        network.get(getString(R.string.link_about_team), response -> {
+        network.get(Helper.getResString(R.string.link_about_team), response -> {
             if (response != null) {
                 sharedPref.edit().putString("aboutData", response).apply();
             } else {
