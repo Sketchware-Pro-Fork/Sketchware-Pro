@@ -869,7 +869,7 @@ public class Jx {
 
     private String getViewInitializer(ViewBean viewBean) {
         final var viewPackageName = viewBean.convert;
-        final var viewClassName = viewPackageName.substring(viewPackageName.lastIndexOf("."));
+        var viewClassName = viewPackageName.substring(viewPackageName.lastIndexOf("."));
         if (viewClassName.isEmpty()) {
             viewClassName = viewBean.getClassInfo().a();
         }
