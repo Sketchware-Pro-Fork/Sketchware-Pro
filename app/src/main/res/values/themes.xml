@@ -17,6 +17,7 @@
         <item name="popupMenuStyle">@style/Widget.Material3.PopupMenu</item>
         <item name="android:popupMenuStyle">@style/Widget.Material3.PopupMenu</item>
         <item name="materialCardViewFilledStyle">@style/Widget.SketchwarePro.MaterialCardView</item>
+        <item name="sideSheetDialogTheme">@style/ThemeOverlay.SketchwarePro.SideSheetDialog</item>
         <!-- Type styles. -->
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.SketchwarePro.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.SketchwarePro.DisplayMedium</item>
